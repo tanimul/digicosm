@@ -158,9 +158,12 @@ class StreamRequestSerializer(serializers.Serializer):
     """
     video_id  = serializers.UUIDField()
     quality   = serializers.ChoiceField(
-                    choices=VideoQuality.quality.field.choices if hasattr(VideoQuality, 'quality') else [
-                        ("360p", "360p"), ("480p", "480p"), ("720p", "720p"),
-                        ("1080p", "1080p"), ("4k", "4k"),
+                    choices=[
+                        ("360p", "360p SD"),
+                        ("480p", "480p SD"),
+                        ("720p", "720p HD"),
+                        ("1080p", "1080p Full HD"),
+                        ("4k", "4K Ultra HD"),
                     ],
                     default="720p",
                 )
