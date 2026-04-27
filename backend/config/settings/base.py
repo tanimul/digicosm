@@ -105,6 +105,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    # Custom DCE middleware
+    "middleware.request_logging.RequestLoggingMiddleware",
+    "middleware.device_tracking.DeviceTrackingMiddleware",
+    "middleware.rate_limiting.RateLimitingMiddleware",
 ]
 
 # ---------------------------------------------------------------------------

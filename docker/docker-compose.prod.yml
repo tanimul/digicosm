@@ -1,0 +1,52 @@
+version: "3.9"
+
+# ─── DCE Platform — Production Overrides ─────────────────────────────────────
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+
+  backend:
+    build:
+      target: runtime
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DEBUG: "False"
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             gunicorn config.wsgi:application
+               --bind 0.0.0.0:8000
+               --workers 4
+               --worker-class gthread
+               --threads 2
+               --timeout 120
+               --access-logfile -
+               --error-logfile -"
+
+  celery_worker:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DEBUG: "False"
+    deploy:
+      replicas: 2
+
+  celery_beat:
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      DEBUG: "False"
+
+  frontend:
+    environment:
+      NODE_ENV: production
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    deploy:
+      restart_policy:
+        condition: on-failure
