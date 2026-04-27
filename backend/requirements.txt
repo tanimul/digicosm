@@ -28,6 +28,8 @@ colorfield==0.11.0
 celery-beat==0.0.1
 django-celery-beat==2.7.0
 django-celery-results==2.5.1
+drf-spectacular==0.27.2
 factory-boy==3.3.1
 pytest-django==4.9.0
+pytest-cov==5.0.0
 coverage==7.6.1

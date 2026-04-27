@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     'Bangladesh\'s unified digital economy platform: AI, streaming, subscriptions, and digital marketplace powered by BDT wallet.',
   keywords: ['AI', 'streaming', 'marketplace', 'Bangladesh', 'bKash', 'digital'],
   robots: { index: true, follow: true },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'DCE',
+  },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {

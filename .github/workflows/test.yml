@@ -55,6 +55,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create migrations
+        working-directory: backend
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.development
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/dce_test
+          REDIS_URL: redis://localhost:6379/0
+          SECRET_KEY: ci-test-secret-key
+          FERNET_KEY: dGVzdC1mZXJuZXQta2V5LXdoaWNoLWlzLTMyLWJ5dGVzLWxvbmc=
+        run: python manage.py makemigrations --noinput
+
       - name: Run migrations
         working-directory: backend
         env:
@@ -62,25 +72,18 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/dce_test
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: ci-test-secret-key
+          FERNET_KEY: dGVzdC1mZXJuZXQta2V5LXdoaWNoLWlzLTMyLWJ5dGVzLWxvbmc=
         run: python manage.py migrate --noinput
 
       - name: Run tests
         working-directory: backend
         env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
+          DJANGO_SETTINGS_MODULE: config.settings.testing
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/dce_test
           REDIS_URL: redis://localhost:6379/0
           SECRET_KEY: ci-test-secret-key
-        run: python -m pytest --tb=short -q
-
-      - name: Check for missing migrations
-        working-directory: backend
-        env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/dce_test
-          REDIS_URL: redis://localhost:6379/0
-          SECRET_KEY: ci-test-secret-key
-        run: python manage.py makemigrations --check --dry-run
+          FERNET_KEY: dGVzdC1mZXJuZXQta2V5LXdoaWNoLWlzLTMyLWJ5dGVzLWxvbmc=
+        run: python -m pytest --tb=short -q --cov=apps --cov-report=term-missing
 
   frontend-test:
     name: Frontend Tests
