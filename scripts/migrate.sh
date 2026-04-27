@@ -10,12 +10,11 @@ if [[ "${1:-}" == "--seed" ]]; then
     SEED=true
 fi
 
+echo "==> Creating migration files ..."
+python backend/manage.py makemigrations --noinput
+
 echo "==> Running migrations ..."
 python backend/manage.py migrate --noinput
-
-echo "==> Creating migration files for any unmigrated changes ..."
-python backend/manage.py makemigrations --check --dry-run 2>/dev/null || \
-    python backend/manage.py makemigrations
 
 if [[ "$SEED" == "true" ]]; then
     echo "==> Seeding initial data ..."

@@ -50,6 +50,9 @@ wait_for "$DB_HOST"    "$DB_PORT"    "PostgreSQL"
 wait_for "$REDIS_HOST" "$REDIS_PORT" "Redis"
 
 # ── Django setup ──────────────────────────────────────────────────────────────
+log "Creating migration files ..."
+python manage.py makemigrations --noinput
+
 log "Running database migrations ..."
 python manage.py migrate --noinput
 

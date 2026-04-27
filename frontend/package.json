@@ -25,7 +25,8 @@
     "lucide-react": "^0.395.0",
     "date-fns": "^3.6.0",
     "react-hot-toast": "^2.4.1",
-    "js-cookie": "^3.0.5"
+    "js-cookie": "^3.0.5",
+    "class-variance-authority": "^0.7.0"
   },
   "devDependencies": {
     "typescript": "^5.4.5",
