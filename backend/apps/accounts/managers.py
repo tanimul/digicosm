@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{8}$"
+BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{9}$"
 _phone_validator = RegexValidator(
     regex=BANGLADESH_PHONE_REGEX,
     message=_(

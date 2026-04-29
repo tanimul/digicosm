@@ -31,7 +31,10 @@ export const useAuthStore = create<AuthState>()(
         sendOTP: async (payload) => {
           set({ isLoading: true, error: null });
           try {
-            await post('/accounts/otp/send/', payload);
+            await post('/auth/otp/send/', {
+              phone_number: payload.phone,
+              purpose: (payload.purpose ?? 'LOGIN').toLowerCase(),
+            });
             set({ otpSent: true, isLoading: false });
           } catch (err: unknown) {
             const msg = extractErrorMessage(err, 'Failed to send OTP');
@@ -43,7 +46,12 @@ export const useAuthStore = create<AuthState>()(
         verifyOTP: async (payload) => {
           set({ isLoading: true, error: null });
           try {
-            const response = await post<AuthResponse>('/accounts/otp/verify/', payload);
+            const raw = await post<{ success: boolean; data: AuthResponse }>('/auth/otp/verify/', {
+              phone_number: payload.phone,
+              otp_code: payload.otp,
+              purpose: (payload.purpose ?? 'LOGIN').toLowerCase(),
+            });
+            const response = raw.data;
             setTokens(response.tokens);
             setStoredUser(response.user);
             set({

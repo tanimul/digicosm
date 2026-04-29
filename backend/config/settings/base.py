@@ -573,7 +573,7 @@ STRIPE_WEBHOOK_SECRET: str = env("STRIPE_WEBHOOK_SECRET", default="")
 # Application-level constants
 # ---------------------------------------------------------------------------
 
-BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{8}$"  # +880 followed by 10 digits
+BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{9}$"  # +880 followed by 10 digits
 
 SUPPORTED_CONTENT_TYPES = [
     "video",

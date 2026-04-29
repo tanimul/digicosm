@@ -306,6 +306,8 @@ class VerifyOTPView(APIView):
                 "access": str(refresh.access_token),
                 "refresh": str(refresh),
             }
+            from apps.accounts.serializers import UserProfileSerializer
+            response_data["user"] = UserProfileSerializer(user, context={"request": request}).data
 
         logger.info(
             "OTP verified: user=%s purpose=%s",

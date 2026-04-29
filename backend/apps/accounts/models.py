@@ -25,7 +25,7 @@ from apps.accounts.managers import UserManager
 # Constants
 # ---------------------------------------------------------------------------
 
-BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{8}$"
+BANGLADESH_PHONE_REGEX = r"^\+880[1-9]\d{9}$"
 
 phone_validator = RegexValidator(
     regex=BANGLADESH_PHONE_REGEX,
@@ -218,6 +218,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     # ------------------------------------------------------------------
     # Properties
     # ------------------------------------------------------------------
+
+    @property
+    def username(self) -> str:
+        """Alias for phone_number — satisfies code that expects a username field."""
+        return self.phone_number
 
     @property
     def short_name(self) -> str:
