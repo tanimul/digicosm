@@ -10,6 +10,11 @@ from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
 from django.views.generic import RedirectView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 # ---------------------------------------------------------------------------
 # Health-check endpoint (no auth required, used by load-balancer probes)
@@ -86,8 +91,12 @@ urlpatterns = [
     # Probe endpoints (no auth, no rate limiting)
     path("health/", health_check, name="health_check"),
     path("ready/", ready_check, name="ready_check"),
-    # Redirect bare root to API docs (or remove if not serving docs)
-    path("", RedirectView.as_view(url="/api/v1/", permanent=False), name="root"),
+    # OpenAPI schema + interactive docs
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    # Redirect bare root to Swagger UI
+    path("", RedirectView.as_view(url="/api/docs/", permanent=False), name="root"),
 ]
 
 # ---------------------------------------------------------------------------

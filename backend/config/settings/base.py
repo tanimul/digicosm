@@ -75,6 +75,7 @@ THIRD_PARTY_APPS = [
     "channels",
     "django_celery_beat",
     "django_celery_results",
+    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -105,6 +106,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    # Custom DCE middleware
+    "middleware.request_logging.RequestLoggingMiddleware",
+    "middleware.device_tracking.DeviceTrackingMiddleware",
+    "middleware.rate_limiting.RateLimitingMiddleware",
 ]
 
 # ---------------------------------------------------------------------------
@@ -248,8 +253,40 @@ REST_FRAMEWORK = {
         "login": "10/minute",
     },
     "EXCEPTION_HANDLER": "apps.accounts.exceptions.custom_exception_handler",
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "NON_FIELD_ERRORS_KEY": "errors",
+}
+
+# ---------------------------------------------------------------------------
+# drf-spectacular — OpenAPI schema & docs
+# ---------------------------------------------------------------------------
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "DCE Platform API",
+    "DESCRIPTION": (
+        "Bangladesh Digital Consumption Ecosystem — unified API for AI, "
+        "streaming, marketplace, subscriptions, and BDT wallet."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "CONTACT": {"name": "DCE Team", "email": "api@dce.com.bd"},
+    "LICENSE": {"name": "Proprietary"},
+    "SERVERS": [
+        {"url": "https://api.dce.com.bd", "description": "Production"},
+        {"url": "http://localhost:8000", "description": "Local Dev"},
+    ],
+    "TAGS": [
+        {"name": "auth", "description": "OTP authentication & JWT tokens"},
+        {"name": "wallet", "description": "BDT wallet, deposits & withdrawals"},
+        {"name": "ai", "description": "AI Gateway — multi-provider chat & services"},
+        {"name": "streaming", "description": "Video & course streaming platform"},
+        {"name": "marketplace", "description": "Digital product marketplace"},
+        {"name": "subscriptions", "description": "Subscription plans & billing"},
+        {"name": "notifications", "description": "In-app, SMS & push notifications"},
+        {"name": "admin-panel", "description": "Admin management APIs"},
+    ],
+    "COMPONENT_SPLIT_REQUEST": True,
+    "SORT_OPERATIONS": False,
 }
 
 # ---------------------------------------------------------------------------
